@@ -34,59 +34,6 @@ val_loader = DataLoader(val_ds, batch_size=2, num_workers=0, pin_memory=True)
 
 
 
-# Dataset Class for Setting up the data loading process
-# Stuff to fill in this script: _init_transform()
-# class inaturalist(Dataset):
-#     def __init__(self, root_dir, mode = 'train', transform = True):
-#         self.data_dir = root_dir
-#         self.mode = mode
-#         self.transforms = transform
-#         self._init_dataset()
-#         if transform:
-#             self._init_transform()
-
-#     def _init_dataset(self):
-#         self.files = []
-#         self.labels = []
-#         dirs = sorted(os.listdir(os.path.join(self.data_dir, 'train')))
-#         dirs = [dir for dir in dirs if dir[0]!= "."]
-#         if self.mode == 'train':
-#             for dir in range(len(dirs)):
-#                 files = sorted(glob(os.path.join(self.data_dir, 'train', dirs[dir], '*.jpg')))
-#                 self.labels += [dir]*len(files)
-#                 self.files += files
-#         elif self.mode == 'val':
-#             for dir in range(len(dirs)):
-#                 files = sorted(glob(os.path.join(self.data_dir, 'val', dirs[dir], '*.jpg')))
-#                 self.labels += [dir]*len(files)
-#                 self.files += files
-#         else:
-#             print("No Such Dataset Mode")
-#             return None
-
-#     def _init_transform(self):
-#         self.transform = transforms.Compose([
-#             # Useful link for this part: https://pytorch.org/vision/stable/transforms.html
-#             #----------------YOUR CODE HERE---------------------#
-#             transforms.Resize((256,256)),transforms.ToTensor(), transforms.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))  #converts image to PyTorch tensor and resizes it
-#         ])
-
-#     def __getitem__(self, index):
-#         img = Image.open(self.files[index]).convert('RGB')
-#         label = self.labels[index]
-
-#         if self.transforms:
-#             img = self.transform(img)
-
-#         label = torch.tensor(label, dtype = torch.long)
-
-#         return img, label
-
-#     def __len__(self):
-#         return len(self.files)
-
-
-
 
 
 import torch
@@ -94,8 +41,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 #Class to define the model which we will use for training
-#Stuff to fill in: The Architecture of your model, the forward function to define the forward pass
-# NOTE!: You are NOT allowed to use pretrained models for this task
+
 
 def conv_block(in_channels,out_channels,pool=False):
     layers = [nn.Conv2d(in_channels,out_channels,kernel_size=3,padding=1), nn.BatchNorm2d(out_channels),nn.ReLU(inplace=True)]
@@ -198,25 +144,15 @@ import torch
 from torch.utils.data import DataLoader
 #from torchinfo import summary
 
-# Sections to Fill: Define Loss function, optimizer and model, Train and Eval functions and the training loop
 
 ############################################# DEFINE HYPERPARAMS #####################################################
-# Feel free to change these hyperparams based on your machine's capactiy
 batch_size = 8
 epochs = 40
 learning_rate = 0.0001
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-############################################# DEFINE DATALOADER #####################################################
-# trainset = inaturalist(root_dir='../input/inaturalist12k/Data/inaturalist_12K', mode='train')
-# valset = inaturalist(root_dir='../input/inaturalist12k/Data/inaturalist_12K', mode = 'val')
-
-# trainloader = DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=0)
-# valloader = DataLoader(valset, batch_size=2, shuffle=False, num_workers=0)
 
 ################################### DEFINE LOSS FUNCTION, MODEL AND OPTIMIZER ######################################
-# USEFUL LINK: https://pytorch.org/docs/stable/nn.html#loss-functions
-#---Define the loss function to use, model object and the optimizer for training---#
 model=ResNet(67).to(device)   ##creating model object
 criterion = nn.CrossEntropyLoss()    #loss function here is cross entropy (classification problem)
 optimizer=torch.optim.Adam(model.parameters(),learning_rate)   #optimizer here is Adam
@@ -242,11 +178,7 @@ def accuracy(y_pred, y):
     return correct/total
 
 def train(model, dataset, optimizer, criterion, device):
-    '''
-    Write the function to train the model for one epoch
-    Feel free to use the accuracy function defined above as an extra metric to track
-    '''
-    #------YOUR CODE HERE-----#
+
     model.train()
     netloss=0
     netacc=0
@@ -274,11 +206,7 @@ def train(model, dataset, optimizer, criterion, device):
 
 
 def eval(model, dataset, criterion, device):
-    '''
-    Write the function to validate the model after each epoch
-    Feel free to use the accuracy function defined above as an extra metric to track
-    '''
-    #------YOUR CODE HERE-----#
+
     model.eval()
     netloss=0
     netacc=0
@@ -307,29 +235,7 @@ def epoch_time(start_time, end_time):
     return elapsed_mins, elapsed_secs
 
 ################################################### TRAINING #######################################################
-# simple_model = nn.Sequential(
-#     nn.Conv2d(3, 32, kernel_size=3, padding=1),
-#             nn.ReLU(),              #32,32,256,256
-#             nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
-#             nn.ReLU(),
-#             nn.MaxPool2d(2, 2),     #32,64,128,128
-#             nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
-#             nn.ReLU(),       #32,128,128,128
-#             nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
-#             nn.ReLU(),
-#             nn.MaxPool2d(2, 2),      #32,128,64,64
-#             nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
-#             nn.ReLU(),     #32,256,64,64
-#             nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
-#             nn.ReLU(),
-#             nn.MaxPool2d(2, 2),     #32,256,32,32
-#             nn.Flatten(),
-#             nn.Linear(256*32*32, 1024),
-#             nn.ReLU(),        #32,1024
-#             nn.Linear(1024, 512),
-#             nn.ReLU(),       #32,512
-#             nn.Linear(512, 10)    #32,10
-# )
+
 # for images, labels in trainloader:
 #     print('images.shape:', images.shape)
 #     out=simple_model(images)
@@ -352,11 +258,6 @@ for epoch in range(epochs):
 
     start_time = time.monotonic()
 
-    '''
-    Insert code to train and evaluate the model (Hint: use the functions you previously made :P)
-    Also save the weights of the model in the checkpoint directory
-    '''
-    #------YOUR CODE HERE-----#
     train(model,train_loader,optimizer,criterion,device)
     eval(model,val_loader,criterion,device)
     torch.save(model.state_dict(), 'weights_only.pth')
