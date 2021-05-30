@@ -1,3 +1,3 @@
 # Quora Insincere Questions Classification
 
-[Link to Kaggle Competition Page](https://www.kaggle.com/c/quora-insincere-questions-classification/data)
+The Dataset along with the embeddings can be downloaded from the [Kaggle Competition Page](https://www.kaggle.com/c/quora-insincere-questions-classification/data) </br>
