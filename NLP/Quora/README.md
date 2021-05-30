@@ -13,3 +13,4 @@ To Download and set-up the environment automatically,</br>
   chmod 755 download.sh
   ./download.sh
 ```
+NOTE: Must have Kaggle API setup already.
