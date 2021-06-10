@@ -3,4 +3,4 @@ This folder contains an overview of Text Classification using NLP Architectures 
 
 1. [RNN/LSTM From Sctatch](Text_Classification_NLP.ipynb)
 2. [Quora Insincere Questions Classification](Quora/)
-3. [Sentiment Analysis using IMDB data](Sentiment Analysis (IMDB)/)
+3. [Sentiment Analysis using IMDB data](Sentiment-Analysis-(IMDB)/)
