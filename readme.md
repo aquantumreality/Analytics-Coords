@@ -1,2 +1,4 @@
 # Analytics-Coords
-`add documentation`
+- [ ] add documentation
+- [ ] provide overview of each folder
+- [ ] credits
